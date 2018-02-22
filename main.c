@@ -43,46 +43,56 @@
 /* TODO: insert other include files here. */
 
 /* TODO: insert other definitions and declarations here. */
-#define FUNCTION_STACK_SIZE 100
+#define FUNCTION_STACK_SIZE 110
 #define TASK1_PRIORITY 1
 #define TASK2_PRIORITY 2
-#define TASK3_PRIORITY 3
+#define TASK3_PRIORITY 1
 
 /*
  * @brief   Application entry point.
  */
-void dummy_task1(void)
+void dummy_task1(void * args)
 {
-	uint8_t counter = 0;
+	TickType_t xLastWakeTime;
+		const TickType_t xPeriod = pdMS_TO_TICKS(4000);
+		uint8_t counter = 0;
+		xLastWakeTime = xTaskGetTickCount();
 	for (;;)
 	{
 		printf("IN TASK 1: %i +++++++++++++++\r\n", counter);
 		counter++;
-		vTaskDelay( 2000 );
+		vTaskDelayUntil( &xLastWakeTime, xPeriod );
 
 	}
 }
 
-void dummy_task2(void)
+void dummy_task2(void * args)
 {
-	uint8_t counter = 0;
+	TickType_t xLastWakeTime;
+		const TickType_t xPeriod = pdMS_TO_TICKS(4000);
+		uint8_t counter = 0;
+		xLastWakeTime = xTaskGetTickCount();
 	for (;;)
 	{
 		printf("IN TASK 2: %i ***************\r\n", counter);
 		counter++;
-		vTaskDelay( 1000 );
+		vTaskDelayUntil( &xLastWakeTime, xPeriod );
 
 	}
 }
 
-void dummy_task3(void)
+void dummy_task3(void * args)
 {
+	TickType_t xLastWakeTime;
+	const TickType_t xPeriod = pdMS_TO_TICKS(4000);
 	uint8_t counter = 0;
+	xLastWakeTime = xTaskGetTickCount();
 	for (;;)
 	{
+
 		printf("IN TASK 3: %i ---------------\r\n", counter);
 		counter++;
-		vTaskDelay( 4000 );
+		vTaskDelayUntil( &xLastWakeTime, xPeriod );
 
 	}
 }
@@ -97,11 +107,18 @@ int main(void) {
     BOARD_InitDebugConsole();
 
     printf("Hello World\n");
-    TaskHandle_t xHandle;
-    xTaskCreate(dummy_task1,"Tarea 1",FUNCTION_STACK_SIZE,NULL,TASK1_PRIORITY,&xHandle);
-    xTaskCreate(dummy_task2,"Tarea 2",FUNCTION_STACK_SIZE,NULL,TASK2_PRIORITY,&xHandle);
-    xTaskCreate(dummy_task3,"Tarea 3",FUNCTION_STACK_SIZE,NULL,TASK3_PRIORITY,&xHandle);
+
+    TaskHandle_t task1_handle;
+    TaskHandle_t task2_handle;
+    TaskHandle_t task3_handle;
+
+
+    xTaskCreate(dummy_task1,"Tarea_1",FUNCTION_STACK_SIZE,NULL,TASK1_PRIORITY,&task1_handle);
+    xTaskCreate(dummy_task2,"Tarea_2",FUNCTION_STACK_SIZE,NULL,TASK2_PRIORITY,&task2_handle);
+    xTaskCreate(dummy_task3,"Tarea_3",FUNCTION_STACK_SIZE,NULL,TASK3_PRIORITY,&task3_handle);
+
     vTaskStartScheduler( );
+
     /* Force the counter to be placed into memory. */
     volatile static int i = 0 ;
     /* Enter an infinite loop, just incrementing a counter. */
