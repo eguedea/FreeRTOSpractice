@@ -101,7 +101,7 @@ int main(void) {
     xTaskCreate(dummy_task1,"Tarea 1",FUNCTION_STACK_SIZE,NULL,TASK1_PRIORITY,&xHandle);
     xTaskCreate(dummy_task2,"Tarea 2",FUNCTION_STACK_SIZE,NULL,TASK2_PRIORITY,&xHandle);
     xTaskCreate(dummy_task3,"Tarea 3",FUNCTION_STACK_SIZE,NULL,TASK3_PRIORITY,&xHandle);
-
+    vTaskStartScheduler( );
     /* Force the counter to be placed into memory. */
     volatile static int i = 0 ;
     /* Enter an infinite loop, just incrementing a counter. */
